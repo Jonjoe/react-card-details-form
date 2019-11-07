@@ -27,11 +27,12 @@ const StyledInputField = styled.div`
 interface InputProps {
   label: string
   onChange: any
+  onClick: any
   value: string
 }
 
 const Input: React.FC<InputProps> = (props: InputProps): JSX.Element => {
-  const { value, onChange, label} = props
+  const { value, onChange, label, onClick} = props
 
   function handleInputChange(event: any) {
     console.log('fired!!')
@@ -46,6 +47,7 @@ const Input: React.FC<InputProps> = (props: InputProps): JSX.Element => {
 
       <StyledInputField>
         <input 
+          onClick={() => onClick()}
           onChange={(event: any) => handleInputChange(event)}
           value={value}
           type="text" 

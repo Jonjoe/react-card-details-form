@@ -3,14 +3,6 @@ import styled from 'styled-components'
 
 import {DEFAULTS_VALUES} from '../../components/Form/Form'
 
-const StyledCardInner = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-`
 
 const StyledCard = styled.div`
   background-color: transparent;
@@ -19,10 +11,20 @@ const StyledCard = styled.div`
   position: relative;
   top: 80px;
   perspective: 1000px;
+`
 
-  &:hover ${StyledCardInner} {
-    transform: rotateY(180deg);
-  } 
+interface StyledCardInnerProps {
+  backActive: boolean
+}
+
+const StyledCardInner = styled.div<StyledCardInnerProps>`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  transform: ${props => props.backActive ? 'rotateY(180deg)' : 'rotateY(0)'};
 `
 
 const StyledCardFront = styled.div`
@@ -63,20 +65,22 @@ function decorateNumber(number: string): string {
 }
   
 interface CardProps {
+  name: string
   number: string
   date: string
-  name: string
+  cvv: string
+  backActive: boolean
 }
   
 const Card: React.FC<CardProps> = (props: CardProps): JSX.Element => {
-  const { number, name, date } = props
+  const { number, name, date, cvv, backActive } = props
   const safeName = name === '' ? DEFAULTS_VALUES.NAME : name
   const safeNumber = number === '' ? DEFAULTS_VALUES.NUMBER : number 
   const safeDate = date === '/' ? `${DEFAULTS_VALUES.EXPIRY_MONTH}/${DEFAULTS_VALUES.EXPIRY_YEAR}` : date
     
   return (
     <StyledCard>
-      <StyledCardInner>
+      <StyledCardInner backActive={backActive}>
         <StyledCardFront>
           <span>{safeName}</span>
           <span>{safeDate}</span>
@@ -84,7 +88,7 @@ const Card: React.FC<CardProps> = (props: CardProps): JSX.Element => {
         </StyledCardFront>
 
         <StyledCardBack>
-          <span>000</span>
+          <span>{cvv}</span>
         </StyledCardBack>
       </StyledCardInner>
 
